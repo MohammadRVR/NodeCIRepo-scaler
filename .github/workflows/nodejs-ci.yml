@@ -1,0 +1,32 @@
+name:  Node.js CI
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+      - name: setup nodejs
+        uses: actions/setup-node@20
+      - name: cache node file
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ hashFiles('**/package-lock.json') }}
+
+      - name: install npm dependencies
+        run: npm ci
+
+      - name: test
+        run: npm test
+      - name: build
+        run: npm run build
+        
